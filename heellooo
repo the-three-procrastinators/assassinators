@@ -1,0 +1,47 @@
+
+import tweepy
+from tweepy import Stream
+from tweepy import OAuthHandler
+from tweepy.streaming import StreamListener
+import time
+
+access_key = "3238931595-xV277sX1YOWzhuwdoEmO8bMG2hGlowN26xqa9fZ"
+access_secret = "jEnSLR35ZrslX2TP4ywaMzY0NEtTvjsfuoyvH1Wz4winB"
+consumer_secret = "9F6LP1jgSAAedi2yad6Fvl0gN6khzWOjzYxGsmM9pM1XdJ7SGB"
+consumer_key = "zLPqscqDNUjbCrpYHOFgvovr5"
+
+class listener(StreamListener):
+
+    def on_data(self, data):
+        try:
+            print(data)
+            '''saveFile = open('twitterdb.csv','a')
+            saveFile.write(data)
+            saveFile.write('\n')
+            saveFile.close()'''
+            return(True)
+        except BaseException as e:
+            print('failed ondata,',str(e))
+            time.sleep(5)
+            
+    def on_error(self, status):
+        print (status)
+
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_key, access_secret)
+api = tweepy.API(auth)
+
+user = api.me()
+ 
+print('Name: ' + user.name)
+print('Location: ' + user.location)
+print('Friends: ' + str(user.friends_count))
+
+user1 = api.get_user('MrigankSatapat2')
+print('Name: ' + user1.name)
+print('Location: ' + user1.location)
+print('Friends: ' + str(user1.friends_count))
+
+#twitterStream = Stream(auth, listener())
+#twitterStream.filter(track=["Dosa"])
+#twitterStream.filter(locations=[-73.504389,  41.222582, -71.804192 ,42.026518])
