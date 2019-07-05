@@ -1,47 +1,36 @@
-
+import os
 import tweepy
+import sys 
 from tweepy import Stream
+from tweepy import API
 from tweepy import OAuthHandler
-from tweepy.streaming import StreamListener
-import time
 
-access_key = "3238931595-xV277sX1YOWzhuwdoEmO8bMG2hGlowN26xqa9fZ"
-access_secret = "jEnSLR35ZrslX2TP4ywaMzY0NEtTvjsfuoyvH1Wz4winB"
-consumer_secret = "9F6LP1jgSAAedi2yad6Fvl0gN6khzWOjzYxGsmM9pM1XdJ7SGB"
-consumer_key = "zLPqscqDNUjbCrpYHOFgvovr5"
 
-class listener(StreamListener):
+access_secret="nZmL8OSpIKWjI2UmVCJ7Sb0isdd2yyoiwnhVlnYmwwydo"
+access_key="1145910378330640386-2KoOp0ei8YRbRtEedRQdpuR2wNi9oU"
+consumer_key="0LiPj5cAamkLYHSWlPbVAShDp"
+consumer_secret="8vyy6hOUhAHdAKCahzSH6X1nveM40Hbnck3cC4PejkngBze6oB"
 
-    def on_data(self, data):
-        try:
-            print(data)
-            '''saveFile = open('twitterdb.csv','a')
-            saveFile.write(data)
-            saveFile.write('\n')
-            saveFile.close()'''
-            return(True)
-        except BaseException as e:
-            print('failed ondata,',str(e))
-            time.sleep(5)
-            
-    def on_error(self, status):
-        print (status)
+auth = OAuthHandler(consumer_key,consumer_secret)
+auth.set_access_token(access_key,access_secret)
+api=tweepy.API(auth)
+public_tweets = api.home_timeline()
+# foreach through all tweets pulled
+for tweet in public_tweets:
+   # printing the text stored inside the tweet object
+   print (tweet.text)
+   print (tweet.created_at)
+   
 
-auth = OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_key, access_secret)
-api = tweepy.API(auth)
+query ="Bangalore"
+# Language code (follows ISO 639-1 standards)
+language = "en"
 
-user = api.me()
- 
-print('Name: ' + user.name)
-print('Location: ' + user.location)
-print('Friends: ' + str(user.friends_count))
+# Calling the user_timeline function with our parameters
+results = api.search(q=query, lang=language,geocode="12.972442,77.580643,30mi")
 
-user1 = api.get_user('MrigankSatapat2')
-print('Name: ' + user1.name)
-print('Location: ' + user1.location)
-print('Friends: ' + str(user1.friends_count))
-
-#twitterStream = Stream(auth, listener())
-#twitterStream.filter(track=["Dosa"])
-#twitterStream.filter(locations=[-73.504389,  41.222582, -71.804192 ,42.026518])
+# foreach through all tweets pulled
+for tweet in results:
+   # printing the text stored inside the tweet object
+   print (tweet.user.screen_name,"Tweeted:",tweet.text)
+   print("")
